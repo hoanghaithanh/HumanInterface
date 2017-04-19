@@ -1,0 +1,28 @@
+package car_simulator;
+
+public abstract class PeripheralDevice {
+	private String name;
+	private boolean status;
+	
+	public boolean turnOn()
+	{
+		this.status = true;
+		return this.status;
+	};
+	public boolean turnOff()
+	{
+		this.status = false;
+		return this.status == false;
+	};
+	
+	protected void setName()
+	{
+		this.name = this.getClass().getName();
+	}
+	
+	public PeripheralDevice()
+	{
+		setName();
+		this.status = false;
+	}
+}

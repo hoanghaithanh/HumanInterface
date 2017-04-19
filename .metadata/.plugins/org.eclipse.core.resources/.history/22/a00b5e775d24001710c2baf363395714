@@ -1,0 +1,188 @@
+package x_simulator;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import java.awt.FlowLayout;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.Box;
+import javax.swing.JPanel;
+
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.swing.BrowserView;
+
+import java.awt.CardLayout;
+import java.awt.Color;
+
+import javax.swing.JLabel;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.awt.BorderLayout;
+
+public class XMainBoard {
+
+	private JFrame frame;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					XMainBoard window = new XMainBoard();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public XMainBoard() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 733, 486);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
+		
+		Box horizontalBox = Box.createHorizontalBox();
+		horizontalBox.setName("horBox");
+		frame.getContentPane().add(horizontalBox);
+		
+		Box verticalBox = Box.createVerticalBox();
+		horizontalBox.add(verticalBox);
+		
+		JPanel panel_Door = new JPanel();
+		panel_Door.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+			displayPanel(0);
+			panel_Door.setBackground(Color.WHITE);
+			}
+		});
+		panel_Door.setPreferredSize(new Dimension(100, 10));
+		panel_Door.setMinimumSize(new Dimension(50, 50));
+		panel_Door.setBackground(Color.WHITE);
+		verticalBox.add(panel_Door);
+		panel_Door.setLayout(null);
+		
+		JLabel lblDoorControl = new JLabel("Door Control");
+		lblDoorControl.setBounds(12, 42, 72, 16);
+		panel_Door.add(lblDoorControl);
+		
+		JPanel panel_device = new JPanel();
+		panel_device.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				displayPanel(1);
+				panel_device.setBackground(Color.WHITE);
+			}
+		});
+		panel_device.setPreferredSize(new Dimension(100, 10));
+		panel_device.setBackground(Color.GRAY);
+		verticalBox.add(panel_device);
+		panel_device.setLayout(null);
+		
+		JLabel lblSecurity = new JLabel("Device Control");
+		lblSecurity.setBounds(12, 49, 56, 16);
+		panel_device.add(lblSecurity);
+		
+		JPanel panel_Utilities = new JPanel();
+		panel_Utilities.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				displayPanel(2);
+				panel_Utilities.setBackground(Color.WHITE);
+			}
+		});
+		panel_Utilities.setPreferredSize(new Dimension(100, 10));
+		panel_Utilities.setBackground(Color.GRAY);
+		verticalBox.add(panel_Utilities);
+		panel_Utilities.setLayout(null);
+		
+		JLabel lblUtilities = new JLabel("Utilities");
+		lblUtilities.setBounds(12, 46, 56, 16);
+		panel_Utilities.add(lblUtilities);
+		
+		JPanel panel_Navigator = new JPanel();
+		panel_Navigator.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				displayPanel(3);
+				panel_Navigator.setBackground(Color.WHITE);
+			}
+		});
+		panel_Navigator.setPreferredSize(new Dimension(100, 10));
+		panel_Navigator.setBackground(Color.GRAY);
+		verticalBox.add(panel_Navigator);
+		panel_Navigator.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Navigator");
+		lblNewLabel.setBounds(12, 48, 56, 16);
+		panel_Navigator.add(lblNewLabel);
+		
+		JPanel panel_4 = new JPanel();
+		horizontalBox.add(panel_4);
+		panel_4.setLayout(new CardLayout(0, 0));
+		
+		JPanel panel_Door_dp = new JPanel();
+		panel_4.add(panel_Door_dp, "name_172318794265353");
+		
+		JPanel panel_Device_dp = new JPanel();
+		panel_4.add(panel_Device_dp, "name_172331696662152");
+		
+		JPanel panel_Util_dp = new JPanel();
+		panel_4.add(panel_Util_dp, "name_172333993343338");
+		
+		JPanel panel_Nav_dp = new JPanel();
+		Browser browser = new Browser();
+		panel_Nav_dp.setLayout(new BorderLayout(0, 0));
+		BrowserView view = new BrowserView(browser);
+		panel_Nav_dp.add(view);
+		browser.loadURL("http://maps.google.com");
+		panel_4.add(panel_Nav_dp, "name_172335601776851");
+	}
+	
+	private void displayPanel(int order)
+	{
+		for(int i=0;i<4;i++)
+		{
+		((javax.swing.Box)((javax.swing.Box)(frame
+				.getContentPane()
+					.getComponent(0)))							//Horizontal Box
+						.getComponent(0))						//Vertical Box
+							.getComponent(i).setBackground(Color.GRAY);
+		}
+		
+		JPanel panel = ((JPanel)((javax.swing.Box)(frame
+				.getContentPane()
+					.getComponent(0)))							
+						.getComponent(1));
+		if(order==0)
+			((CardLayout)panel.getLayout()).show(panel, "name_172318794265353");
+		if(order==1)
+			((CardLayout)panel.getLayout()).show(panel, "name_172331696662152");
+		if(order==2)
+			((CardLayout)panel.getLayout()).show(panel, "name_172333993343338");
+		if(order==3)
+			((CardLayout)panel.getLayout()).show(panel, "name_172335601776851");				//panel_4/panel(order)
+	}
+}

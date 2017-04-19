@@ -1,0 +1,5 @@
+package car_simulator;
+
+public abstract class PeripheralDevice {
+
+}
