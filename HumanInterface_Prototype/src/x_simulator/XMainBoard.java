@@ -31,6 +31,19 @@ import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
 
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.swing.BrowserView;
+
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 public class XMainBoard {
 
 	private JFrame frame;
@@ -44,6 +57,7 @@ public class XMainBoard {
 			public void run() {
 				try {
 					XMainBoard window = new XMainBoard();
+					
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -66,10 +80,32 @@ public class XMainBoard {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setResizable(false);
 		frame.setBounds(100, 100, 950, 610);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
-
+		JLabel lblStatusvalue = new JLabel("OFF");
+		JLabel label = new JLabel("25");
+		JButton btnTemp = new JButton("Temp +");
+		btnTemp.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int i = Integer.parseInt(label.getText());
+				if(i<30) i++;
+				label.setText(Integer.toString(i));
+			}
+		});
+		btnTemp.setEnabled(false);
+		JButton btnTemp_1 = new JButton("Temp -");
+		btnTemp_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int i = Integer.parseInt(label.getText());
+				if(i>=17) i--;
+				label.setText(Integer.toString(i));
+			}
+		});
+		btnTemp_1.setEnabled(false);
+		
 		Box horizontalBox = Box.createHorizontalBox();
 		horizontalBox.setName("horBox");
 		frame.getContentPane().add(horizontalBox);
@@ -77,165 +113,66 @@ public class XMainBoard {
 		Box verticalBox = Box.createVerticalBox();
 		horizontalBox.add(verticalBox);
 
-		JPanel panel_Door = new JPanel();
-		panel_Door.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				displayPanel(0);
-				panel_Door.setBackground(Color.WHITE);
-			}
-		});
-		panel_Door.setPreferredSize(new Dimension(100, 10));
-		panel_Door.setMinimumSize(new Dimension(50, 50));
-		panel_Door.setBackground(Color.WHITE);
-		verticalBox.add(panel_Door);
-		panel_Door.setLayout(null);
-
-		JLabel lblDoorControl = new JLabel("Door Control");
-		lblDoorControl.setBounds(12, 42, 72, 16);
-		panel_Door.add(lblDoorControl);
-
 		JPanel panel_device = new JPanel();
+		panel_device.setBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(30, 144, 255), new Color(0, 0, 255)));
 		panel_device.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				displayPanel(1);
+				displayPanel(0);
 				panel_device.setBackground(Color.WHITE);
 			}
 		});
 		panel_device.setPreferredSize(new Dimension(100, 10));
-		panel_device.setBackground(Color.GRAY);
+		panel_device.setBackground(new Color(128, 128, 128));
 		verticalBox.add(panel_device);
 		panel_device.setLayout(null);
 
 		JLabel lblSecurity = new JLabel("Device");
-		lblSecurity.setBounds(12, 49, 76, 31);
+		lblSecurity.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblSecurity.setBounds(12, 77, 76, 31);
 		panel_device.add(lblSecurity);
 
 		JPanel panel_Utilities = new JPanel();
+		panel_Utilities.setBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(30, 144, 255), new Color(0, 0, 139)));
 		panel_Utilities.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				displayPanel(2);
+				displayPanel(1);
 				panel_Utilities.setBackground(Color.WHITE);
 			}
 		});
 		panel_Utilities.setPreferredSize(new Dimension(100, 10));
-		panel_Utilities.setBackground(Color.GRAY);
+		panel_Utilities.setBackground(new Color(128, 128, 128));
 		verticalBox.add(panel_Utilities);
 		panel_Utilities.setLayout(null);
 
 		JLabel lblUtilities = new JLabel("Utilities");
-		lblUtilities.setBounds(12, 46, 56, 16);
+		lblUtilities.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblUtilities.setBounds(12, 86, 76, 16);
 		panel_Utilities.add(lblUtilities);
 
 		JPanel panel_Navigator = new JPanel();
+		panel_Navigator.setBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(30, 144, 255), new Color(0, 0, 255)));
 		panel_Navigator.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				displayPanel(3);
+				displayPanel(2);
 				panel_Navigator.setBackground(Color.WHITE);
 			}
 		});
 		panel_Navigator.setPreferredSize(new Dimension(100, 10));
-		panel_Navigator.setBackground(Color.GRAY);
+		panel_Navigator.setBackground(new Color(128, 128, 128));
 		verticalBox.add(panel_Navigator);
 		panel_Navigator.setLayout(null);
 
 		JLabel lblNewLabel = new JLabel("Navigator");
-		lblNewLabel.setBounds(12, 48, 56, 16);
+		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 19));
+		lblNewLabel.setBounds(12, 88, 88, 24);
 		panel_Navigator.add(lblNewLabel);
 
 		JPanel panel_4 = new JPanel();
 		horizontalBox.add(panel_4);
 		panel_4.setLayout(new CardLayout(0, 0));
-
-		JPanel panel_Door_dp = new JPanel();
-		panel_4.add(panel_Door_dp, "name_172318794265353");
-		panel_Door_dp.setLayout(new BorderLayout(0, 0));
-
-		Box horizontalBox_1 = Box.createHorizontalBox();
-		panel_Door_dp.add(horizontalBox_1);
-
-		Box verticalBox_1 = Box.createVerticalBox();
-		verticalBox_1.setMinimumSize(new Dimension(-300, 0));
-		verticalBox_1.setPreferredSize(new Dimension(-300, 0));
-		horizontalBox_1.add(verticalBox_1);
-
-		JPanel panel = new JPanel();
-		panel.setBorder(new BevelBorder(BevelBorder.RAISED, Color.ORANGE, Color.ORANGE, Color.ORANGE, Color.ORANGE));
-		verticalBox_1.add(panel);
-		panel.setLayout(null);
-
-		JLabel lblFrontLeft = new JLabel("Front Left");
-		lblFrontLeft.setBounds(60, 134, 56, 16);
-		panel.add(lblFrontLeft);
-
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.ORANGE, Color.ORANGE, Color.ORANGE, Color.ORANGE));
-		verticalBox_1.add(panel_1);
-		panel_1.setLayout(null);
-
-		JLabel lblRearLeft = new JLabel("Rear Left");
-		lblRearLeft.setBounds(59, 135, 56, 16);
-		panel_1.add(lblRearLeft);
-
-		Box verticalBox_2 = Box.createVerticalBox();
-		verticalBox_2.setPreferredSize(new Dimension(-300, 0));
-		horizontalBox_1.add(verticalBox_2);
-
-		JPanel panel_2 = new JPanel();
-		panel_2.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.ORANGE, Color.ORANGE, Color.ORANGE, Color.ORANGE));
-		verticalBox_2.add(panel_2);
-		panel_2.setLayout(null);
-
-		JLabel lblFrontRight = new JLabel("Front Right");
-		lblFrontRight.setBounds(47, 132, 69, 16);
-		panel_2.add(lblFrontRight);
-
-		JPanel panel_3 = new JPanel();
-		panel_3.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.ORANGE, Color.ORANGE, Color.ORANGE, Color.ORANGE));
-		verticalBox_2.add(panel_3);
-		panel_3.setLayout(null);
-
-		JLabel lblRearRight = new JLabel("Rear Right");
-		lblRearRight.setBounds(53, 132, 73, 16);
-		panel_3.add(lblRearRight);
-
-		JPanel panel_5 = new JPanel();
-		horizontalBox_1.add(panel_5);
-		panel_5.setLayout(null);
-
-		JLabel lblStatus = new JLabel("Door status: ");
-		lblStatus.setBounds(62, 61, 94, 38);
-		panel_5.add(lblStatus);
-
-		JLabel lblDoorName = new JLabel("Door Name");
-		lblDoorName.setBounds(189, 13, 89, 46);
-		panel_5.add(lblDoorName);
-
-		JLabel lblGlassStatus = new JLabel("Glass status: ");
-		lblGlassStatus.setBounds(62, 112, 94, 38);
-		panel_5.add(lblGlassStatus);
-
-		JPanel panel_6 = new JPanel();
-		panel_6.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panel_6.setBounds(62, 391, 374, 88);
-		panel_5.add(panel_6);
-		panel_6.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-
-		JToggleButton tglbtnNewToggleButton = new JToggleButton("Lock Door");
-		tglbtnNewToggleButton.setPreferredSize(new Dimension(89, 50));
-		tglbtnNewToggleButton.setHorizontalAlignment(SwingConstants.LEFT);
-		panel_6.add(tglbtnNewToggleButton);
-
-		JButton btnOpenGlass = new JButton("Open Glass");
-		btnOpenGlass.setPreferredSize(new Dimension(97, 50));
-		panel_6.add(btnOpenGlass);
-
-		JButton btnCloseGlass = new JButton("Close Glass");
-		btnCloseGlass.setPreferredSize(new Dimension(97, 50));
-		panel_6.add(btnCloseGlass);
 
 		JPanel panel_Device_dp = new JPanel();
 		panel_4.add(panel_Device_dp, "name_172331696662152");
@@ -252,82 +189,92 @@ public class XMainBoard {
 		panel_11.setBounds(188, 295, 461, 82);
 		panel_7.add(panel_11);
 
-		JToggleButton tglbtnPowerOn = new JToggleButton("Power On");
+		JToggleButton tglbtnPowerOn = new JToggleButton("Power");
+		tglbtnPowerOn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(tglbtnPowerOn.isSelected())
+				{
+					lblStatusvalue.setText("ON");
+					btnTemp.setEnabled(true);
+					btnTemp_1.setEnabled(true);
+				}
+				else 
+				{
+					lblStatusvalue.setText("OFF");
+					btnTemp.setEnabled(false);
+					btnTemp_1.setEnabled(false);
+				}
+					
+			}
+		});
+		
 		tglbtnPowerOn.setPreferredSize(new Dimension(89, 50));
 		panel_11.add(tglbtnPowerOn);
 
-		JButton btnTemp = new JButton("Temp +");
+		
 		btnTemp.setPreferredSize(new Dimension(77, 50));
 		panel_11.add(btnTemp);
 
-		JButton btnTemp_1 = new JButton("Temp -");
+		
 		btnTemp_1.setPreferredSize(new Dimension(75, 50));
 		panel_11.add(btnTemp_1);
 
 		JLabel lblStatus_1 = new JLabel("Status: ");
-		lblStatus_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lblStatus_1.setBounds(297, 47, 85, 70);
+		lblStatus_1.setFont(new Font("Arial", Font.PLAIN, 30));
+		lblStatus_1.setBounds(297, 47, 118, 70);
 		panel_7.add(lblStatus_1);
 
 		JLabel lblTemperature = new JLabel("Temperature:");
-		lblTemperature.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lblTemperature.setBounds(297, 124, 118, 47);
+		lblTemperature.setFont(new Font("Arial", Font.PLAIN, 30));
+		lblTemperature.setBounds(213, 124, 202, 47);
 		panel_7.add(lblTemperature);
 
-		JLabel lblStatusvalue = new JLabel("StatusValue");
-		lblStatusvalue.setBounds(431, 76, 85, 16);
+		
+		lblStatusvalue.setFont(new Font("Arial", Font.PLAIN, 30));
+		lblStatusvalue.setBounds(430, 68, 147, 29);
 		panel_7.add(lblStatusvalue);
-
-		JLabel lblTempvalue = new JLabel("TempValue");
-		lblTempvalue.setBounds(427, 141, 85, 16);
-		panel_7.add(lblTempvalue);
+		
+		
+		label.setFont(new Font("Arial", Font.PLAIN, 30));
+		label.setBounds(427, 133, 147, 29);
+		panel_7.add(label);
 
 		JPanel panel_8 = new JPanel();
 		tabbedPane.addTab("Rear Camera", null, panel_8, null);
 		panel_8.setLayout(null);
 
-		JPanel panel_12 = new JPanel() {
-			@Override
-			public void paint(Graphics g) {
-				System.out.println(2);
-				if (image != null) {
-					System.out.println(1);
-					g.drawImage(image, 0, 0, this);
-				}
-			}
-		};
+		Main panel_12 = new Main();
+		panel_12.setBackground(Color.LIGHT_GRAY);
 
-		panel_12.setBounds(238, 13, 365, 338);
+		panel_12.setBounds(186, 14, 451, 424);
 		panel_12.setLayout(new BorderLayout(0, 0));
-		VideoCapture videoCap = new VideoCapture();
-
-		videoCap.set(Videoio.CAP_PROP_FRAME_WIDTH, 320);
-		videoCap.set(Videoio.CAP_PROP_FRAME_HEIGHT, 240);
+		
 		Mat temp = new Mat();
 		panel_8.add(panel_12);
 
 		JButton btnStartCamera = new JButton("Start Camera");
+		btnStartCamera.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnStartCamera.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				videoCap.open(0);
-				videoCap.read(temp);
-				// ImageIcon icon = new ImageIcon();
-
-				while (videoCap.read(temp)) {
-					image = toBufferedImage(temp);
-					// System.out.println(image.toString());
-					panel_12.repaint();
-					break;
-					// System.out.println("ahuhu");
-					// videoLabel.setIcon(toBufferedImage(temp));
-
-					// videoLabel.setIcon(icon);
-
+				if(btnStartCamera.getText().equals("Start Camera"))
+				{
+				panel_12.initCamera();
+				btnStartCamera.setText("Stop Camera");
+				}
+				else
+				{
+					panel_12.stop();
+					btnStartCamera.setText("Start Camera");
 				}
 			}
 		});
-		btnStartCamera.setBounds(372, 412, 97, 25);
+		
+		btnStartCamera.setBounds(361, 454, 109, 45);
 		panel_8.add(btnStartCamera);
 
 		JPanel panel_9 = new JPanel();
@@ -338,18 +285,173 @@ public class XMainBoard {
 
 		JPanel panel_Util_dp = new JPanel();
 		panel_4.add(panel_Util_dp, "name_172333993343338");
+		panel_Util_dp.setLayout(new BorderLayout(0, 0));
+		
+		Box horizontalBox_1 = Box.createHorizontalBox();
+		panel_Util_dp.add(horizontalBox_1);
+		
+		Box verticalBox_1 = Box.createVerticalBox();
+		verticalBox_1.setPreferredSize(new Dimension(-450, 0));
+		horizontalBox_1.add(verticalBox_1);
+		JPanel panel = new JPanel();
+		JPanel panel_1 = new JPanel();
+		panel_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				((CardLayout)panel.getLayout()).show(panel, "name_343166705630381");
+			}
+		});
+		verticalBox_1.add(panel_1);
+		panel_1.setLayout(null);
+		
+		JLabel lblNewLabel_1 = new JLabel("Smart antithieft");
+		lblNewLabel_1.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblNewLabel_1.setBounds(12, 34, 218, 49);
+		panel_1.add(lblNewLabel_1);
+		
+		JToggleButton tglbtnOn = new JToggleButton("ON");
+		tglbtnOn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(tglbtnOn.isSelected()) tglbtnOn.setText("OFF");
+				else tglbtnOn.setText("ON");
+			}
+		});
+		tglbtnOn.setBounds(12, 82, 67, 48);
+		panel_1.add(tglbtnOn);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				((CardLayout)panel.getLayout()).show(panel, "name_343194074161899");
+			}
+		});
+		verticalBox_1.add(panel_2);
+		panel_2.setLayout(null);
+		
+		JLabel lblSmartWindscreenWipers = new JLabel("Smart windscreen wipers");
+		lblSmartWindscreenWipers.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblSmartWindscreenWipers.setBounds(12, 30, 300, 49);
+		panel_2.add(lblSmartWindscreenWipers);
+		
+		JToggleButton toggleButton = new JToggleButton("ON");
+		toggleButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(toggleButton.isSelected()) toggleButton.setText("OFF");
+				else toggleButton.setText("ON");
+			}
+		});
+		toggleButton.setBounds(12, 78, 67, 52);
+		panel_2.add(toggleButton);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				((CardLayout)panel.getLayout()).show(panel, "name_343209872829260");
+			}
+		});
+		verticalBox_1.add(panel_3);
+		panel_3.setLayout(null);
+		
+		JLabel lblAutoAdjustFlashlight = new JLabel("Auto adjust FlashLight");
+		lblAutoAdjustFlashlight.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblAutoAdjustFlashlight.setBounds(12, 26, 300, 49);
+		panel_3.add(lblAutoAdjustFlashlight);
+		
+		JToggleButton toggleButton_1 = new JToggleButton("ON");
+		toggleButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(toggleButton_1.isSelected()) toggleButton_1.setText("OFF");
+				else toggleButton_1.setText("ON");
+			}
+		});
+		toggleButton_1.setBounds(12, 74, 67, 56);
+		panel_3.add(toggleButton_1);
+		
+		JPanel panel_5 = new JPanel();
+		panel_5.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				((CardLayout)panel.getLayout()).show(panel, "name_343226222483365");
+			}
+		});
+		verticalBox_1.add(panel_5);
+		panel_5.setLayout(null);
+		
+		JLabel lblLockButtonsWhen = new JLabel("Lock buttons when hands on wheel");
+		lblLockButtonsWhen.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblLockButtonsWhen.setBounds(12, 27, 325, 49);
+		panel_5.add(lblLockButtonsWhen);
+		
+		JToggleButton toggleButton_2 = new JToggleButton("ON");
+		toggleButton_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(toggleButton_2.isSelected()) toggleButton_2.setText("OFF");
+				else toggleButton_2.setText("ON");
+			}
+		});
+		toggleButton_2.setBounds(12, 73, 67, 57);
+		panel_5.add(toggleButton_2);
+		
+		
+		panel.setMaximumSize(new Dimension(32700, 32767));
+		panel.setPreferredSize(new Dimension(-300, 10));
+		horizontalBox_1.add(panel);
+		panel.setSize(new Dimension(-300, 0));
+		panel.setLayout(new CardLayout(0, 0));
+		
+		JPanel antiTheftInfo = new JPanel();
+		panel.add(antiTheftInfo, "name_343166705630381");
+		antiTheftInfo.setLayout(null);
+		
+		JLabel lblNewLabel_2 = new JLabel("<html>When this feature is turned on, if this car is affected by external forces while the Smart Key is not in a radius of 5 meters, the car will emit alarm sounds</html>");
+		lblNewLabel_2.setFont(new Font("Arial", Font.PLAIN, 18));
+		lblNewLabel_2.setBounds(33, 0, 420, 144);
+		antiTheftInfo.add(lblNewLabel_2);
+		
+		JPanel windsScreenInfo = new JPanel();
+		panel.add(windsScreenInfo, "name_343194074161899");
+		windsScreenInfo.setLayout(null);
+		
+		JLabel lblwhenThisFeature = new JLabel("<html>When this feature is turned on, the wiper will automatically clears the windscreen when the windscreen is dirty or smudged</html>");
+		lblwhenThisFeature.setFont(new Font("Arial", Font.PLAIN, 18));
+		lblwhenThisFeature.setBounds(33, 141, 420, 144);
+		windsScreenInfo.add(lblwhenThisFeature);
+		
+		JPanel adjustLightInfo = new JPanel();
+		panel.add(adjustLightInfo, "name_343209872829260");
+		adjustLightInfo.setLayout(null);
+		
+		JLabel lblwhenThisFeature_1 = new JLabel("<html>When this feature is turned on, the car will automatically adjust the light brightness and gradient so as not to divert people's eyes in the opposite direction</html>");
+		lblwhenThisFeature_1.setFont(new Font("Arial", Font.PLAIN, 18));
+		lblwhenThisFeature_1.setBounds(12, 289, 420, 144);
+		adjustLightInfo.add(lblwhenThisFeature_1);
+		
+		JPanel lockButtonInfo = new JPanel();
+		panel.add(lockButtonInfo, "name_343226222483365");
+		lockButtonInfo.setLayout(null);
+		
+		JLabel lblwhenThisFeature_2 = new JLabel("<html>When this feature is turned on, the physical buttons will be disabled when both of driver's hands is on the steering wheel</html>");
+		lblwhenThisFeature_2.setFont(new Font("Arial", Font.PLAIN, 18));
+		lblwhenThisFeature_2.setBounds(12, 431, 420, 144);
+		lockButtonInfo.add(lblwhenThisFeature_2);
 
 		JPanel panel_Nav_dp = new JPanel();
-		// Browser browser = new Browser();
-		// panel_Nav_dp.setLayout(new BorderLayout(0, 0));
-		// BrowserView view = new BrowserView(browser);
-		// panel_Nav_dp.add(view);
-		// browser.loadURL("http://maps.google.com");
+		 Browser browser = new Browser();
+		 panel_Nav_dp.setLayout(new BorderLayout(0, 0));
+		 BrowserView view = new BrowserView(browser);
+		 panel_Nav_dp.add(view);
+		 browser.loadURL("http://maps.google.com");
 		panel_4.add(panel_Nav_dp, "name_172335601776851");
 	}
 
 	private void displayPanel(int order) {
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 3; i++) {
 			((javax.swing.Box) ((javax.swing.Box) (frame.getContentPane().getComponent(0))) // Horizontal
 																							// Box
 					.getComponent(0)) // Vertical Box
@@ -358,13 +460,16 @@ public class XMainBoard {
 
 		JPanel panel = ((JPanel) ((javax.swing.Box) (frame.getContentPane().getComponent(0))).getComponent(1));
 		if (order == 0)
-			((CardLayout) panel.getLayout()).show(panel, "name_172318794265353");
-		if (order == 1)
 			((CardLayout) panel.getLayout()).show(panel, "name_172331696662152");
-		if (order == 2)
+		if (order == 1)
 			((CardLayout) panel.getLayout()).show(panel, "name_172333993343338");
-		if (order == 3)
-			((CardLayout) panel.getLayout()).show(panel, "name_172335601776851"); // panel_4/panel(order)
+		if (order == 2)
+			((CardLayout) panel.getLayout()).show(panel, "name_172335601776851");
+	}
+	
+	public void changeTextForButton(JButton btn, String text)
+	{
+		btn.setText(text);
 	}
 
 	public Image toBufferedImage(Mat m) {

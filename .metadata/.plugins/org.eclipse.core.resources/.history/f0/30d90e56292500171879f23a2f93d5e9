@@ -1,0 +1,90 @@
+package x_simulator;
+
+import java.awt.FlowLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.videoio.VideoCapture;
+
+public class Main extends JPanel {
+
+	JLabel label;
+	JPanelOpenCV t;
+	VideoCapture camera;
+	Thread thread;
+
+	public Main() {
+
+		initLayout();
+
+
+//		this.addWindowListener(new WindowAdapter() {
+//			public void windowClosing(WindowEvent e) {
+//				try {
+//					camera.release();
+//					thread.interrupt();
+//				} catch (Exception ex) {
+//					ex.printStackTrace();
+//				} finally {
+//					System.exit(0);
+//				}
+//			}
+//		});
+
+	}
+	
+	public void stop()
+	{
+		try {
+			camera.release();
+			thread.interrupt();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	private void initLayout() {
+		setSize(800, 600);
+
+		label = new JLabel();
+		label.setSize(451, 424);
+		add(label);
+		setVisible(true);
+	}
+
+	private void initCamera() {
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+
+		t = new JPanelOpenCV();
+		camera = new VideoCapture(0);
+		Mat frame = new Mat();
+		camera.read(frame);
+
+		thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					if (camera.read(frame)) {
+						label.setIcon(new ImageIcon(t.MatToBufferedImage(frame)));
+					}
+				}
+			}
+		});
+
+		if (!camera.isOpened()) {
+			System.out.println("Error");
+		} else {
+			thread.start();
+		}
+
+	}
+}
