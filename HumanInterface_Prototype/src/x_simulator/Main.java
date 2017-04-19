@@ -20,49 +20,60 @@ public class Main extends JFrame {
 	JLabel label;
 	JPanelOpenCV t;
 	VideoCapture camera;
+	Thread thread;
 
 	public Main() {
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
+		initLayout();
+
+		initCamera();
+
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				try {
+					camera.release();
+					thread.interrupt();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				} finally {
+					System.exit(0);
+				}
+			}
+		});
+
+	}
+
+	private void initLayout() {
 		setTitle("Test");
 		setSize(800, 600);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		label = new JLabel();
 		label.setSize(800, 600);
 		getContentPane().add(label);
 		setVisible(true);
+	}
+
+	private void initCamera() {
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		t = new JPanelOpenCV();
 		camera = new VideoCapture(0);
 		Mat frame = new Mat();
 		camera.read(frame);
-		
-		Thread thread = new Thread(new Runnable() {
+
+		thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				while (true) {
 					if (camera.read(frame)) {
 						label.setIcon(new ImageIcon(t.MatToBufferedImage(frame)));
-						label.revalidate();
-						label.repaint();
-						label.update(label.getGraphics());
+//						label.revalidate();
+//						label.repaint();
+//						label.update(label.getGraphics());
 					}
 				}
 			}
 		});
-		
-		this.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				camera.release();
-				thread.interrupt();
-				System.exit(0);
-			}
-		});
-
-		
-
-		
 
 		if (!camera.isOpened()) {
 			System.out.println("Error");
