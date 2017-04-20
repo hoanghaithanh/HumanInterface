@@ -10,10 +10,18 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -30,12 +38,17 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
+
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.swing.BrowserView;
+
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.metal.MetalToggleButtonUI;
 import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -86,6 +99,7 @@ public class XMainBoard {
 		btnTemp.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Toolkit.getDefaultToolkit().beep();
 				int i = Integer.parseInt(label.getText());
 				if(i<30) i++;
 				label.setText(Integer.toString(i));
@@ -95,6 +109,7 @@ public class XMainBoard {
 		JButton btnTemp_1 = new JButton("Temp -");
 		btnTemp_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				Toolkit.getDefaultToolkit().beep();
 				int i = Integer.parseInt(label.getText());
 				if(i>=17) i--;
 				label.setText(Integer.toString(i));
@@ -186,22 +201,31 @@ public class XMainBoard {
 		panel_7.add(panel_11);
 
 		JToggleButton tglbtnPowerOn = new JToggleButton("Power");
-		tglbtnPowerOn.addMouseListener(new MouseAdapter() {
+		tglbtnPowerOn.setUI(new MetalToggleButtonUI() {
+		    @Override
+		    protected Color getSelectColor() {
+		        return Color.RED;
+		    }
+		});
+		tglbtnPowerOn.addActionListener(new ActionListener() {
+			
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
 				if(tglbtnPowerOn.isSelected())
 				{
+					playSound("airconditioner_on.wav");
 					lblStatusvalue.setText("ON");
 					btnTemp.setEnabled(true);
 					btnTemp_1.setEnabled(true);
 				}
 				else 
 				{
+					playSound("airconditioner_off.wav");
 					lblStatusvalue.setText("OFF");
 					btnTemp.setEnabled(false);
 					btnTemp_1.setEnabled(false);
 				}
-					
 			}
 		});
 		
@@ -250,25 +274,33 @@ public class XMainBoard {
 		panel_8.add(panel_12);
 
 		JButton btnStartCamera = new JButton("Start Camera");
+		
 		btnStartCamera.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnStartCamera.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
+				if(btnStartCamera.isEnabled())
+			{
 				if(btnStartCamera.getText().equals("Start Camera"))
-				{
-				panel_12.initCamera();
-				btnStartCamera.setText("Stop Camera");
-				}
-				else
-				{
-					panel_12.stop();
-					btnStartCamera.setText("Start Camera");
+					
+					{
+						btnStartCamera.setText("Stop Camera");
+						btnStartCamera.setEnabled(false);
+						playSound("rearcamera_on.wav");
+						panel_12.initCamera();
+						btnStartCamera.setEnabled(true);
+					}
+					else
+					{
+						panel_12.stop();
+						btnStartCamera.setText("Start Camera");
+						btnStartCamera.setEnabled(false);
+						playSound("rearcamera_off.wav");
+						btnStartCamera.setEnabled(true);
+					}
+				
 				}
 			}
 		});
+
 		
 		btnStartCamera.setBounds(361, 454, 109, 45);
 		panel_8.add(btnStartCamera);
@@ -289,8 +321,14 @@ public class XMainBoard {
 		Box verticalBox_1 = Box.createVerticalBox();
 		verticalBox_1.setPreferredSize(new Dimension(-450, 0));
 		horizontalBox_1.add(verticalBox_1);
-		
+		JPanel panel = new JPanel();
 		JPanel panel_1 = new JPanel();
+		panel_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				((CardLayout)panel.getLayout()).show(panel, "name_343166705630381");
+			}
+		});
 		verticalBox_1.add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -299,11 +337,40 @@ public class XMainBoard {
 		lblNewLabel_1.setBounds(12, 34, 218, 49);
 		panel_1.add(lblNewLabel_1);
 		
-		JToggleButton tglbtnOn = new JToggleButton("on");
+		JToggleButton tglbtnOn = new JToggleButton("ON");
+		tglbtnOn.setUI(new MetalToggleButtonUI() {
+		    @Override
+		    protected Color getSelectColor() {
+		        return Color.RED;
+		    }
+		});
+		tglbtnOn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(tglbtnOn.isSelected())
+				{
+					playSound("smartantitheft_on.wav");
+					tglbtnOn.setText("OFF");
+				}
+				else 
+					{
+					playSound("smartantitheft_off.wav");
+					tglbtnOn.setText("ON");
+					}
+			}
+		});
 		tglbtnOn.setBounds(12, 82, 67, 48);
 		panel_1.add(tglbtnOn);
 		
 		JPanel panel_2 = new JPanel();
+		panel_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				((CardLayout)panel.getLayout()).show(panel, "name_343194074161899");
+			}
+		});
 		verticalBox_1.add(panel_2);
 		panel_2.setLayout(null);
 		
@@ -312,11 +379,40 @@ public class XMainBoard {
 		lblSmartWindscreenWipers.setBounds(12, 30, 300, 49);
 		panel_2.add(lblSmartWindscreenWipers);
 		
-		JToggleButton toggleButton = new JToggleButton("on");
+		JToggleButton toggleButton = new JToggleButton("ON");
+		toggleButton.setUI(new MetalToggleButtonUI() {
+		    @Override
+		    protected Color getSelectColor() {
+		        return Color.RED;
+		    }
+		});
+		toggleButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(toggleButton.isSelected()) 
+				{
+				playSound("smartwindscreenwipers_on.wav");
+				toggleButton.setText("OFF");
+				}
+			else 
+			{
+				playSound("smartwindscreenwipers_off.wav");
+				toggleButton.setText("ON");
+			}
+			}
+		});
 		toggleButton.setBounds(12, 78, 67, 52);
 		panel_2.add(toggleButton);
 		
 		JPanel panel_3 = new JPanel();
+		panel_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				((CardLayout)panel.getLayout()).show(panel, "name_343209872829260");
+			}
+		});
 		verticalBox_1.add(panel_3);
 		panel_3.setLayout(null);
 		
@@ -325,24 +421,77 @@ public class XMainBoard {
 		lblAutoAdjustFlashlight.setBounds(12, 26, 300, 49);
 		panel_3.add(lblAutoAdjustFlashlight);
 		
-		JToggleButton toggleButton_1 = new JToggleButton("on");
+		JToggleButton toggleButton_1 = new JToggleButton("ON");
+		toggleButton = new JToggleButton("ON");
+		toggleButton_1.setUI(new MetalToggleButtonUI() {
+		    @Override
+		    protected Color getSelectColor() {
+		        return Color.RED;
+		    }
+		});
+		toggleButton_1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(toggleButton_1.isSelected()) 
+					{
+					playSound("autoadjustflashlight_on.wav");
+					toggleButton_1.setText("OFF");
+					}
+				else 
+					{
+					playSound("autoadjustflashlight_off.wav");
+					toggleButton_1.setText("ON");
+					}
+			}
+		});
 		toggleButton_1.setBounds(12, 74, 67, 56);
 		panel_3.add(toggleButton_1);
 		
 		JPanel panel_5 = new JPanel();
+		panel_5.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				((CardLayout)panel.getLayout()).show(panel, "name_343226222483365");
+			}
+		});
 		verticalBox_1.add(panel_5);
 		panel_5.setLayout(null);
 		
-		JLabel lblLockButtonsWhen = new JLabel("Lock buttons when hands on wheel");
+		JLabel lblLockButtonsWhen = new JLabel("Smart physical buttons control");
 		lblLockButtonsWhen.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblLockButtonsWhen.setBounds(12, 27, 325, 49);
 		panel_5.add(lblLockButtonsWhen);
 		
-		JToggleButton toggleButton_2 = new JToggleButton("on");
+		JToggleButton toggleButton_2 = new JToggleButton("ON");
+		toggleButton_2.setUI(new MetalToggleButtonUI() {
+		    @Override
+		    protected Color getSelectColor() {
+		        return Color.RED;
+		    }
+		});
+		toggleButton_2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(toggleButton_2.isSelected()) 
+				{
+					playSound("smartphysicalbuttonscontrol_on.wav");
+					toggleButton_2.setText("OFF");
+				}
+				else 
+					{
+					playSound("smartphysicalbuttonscontrol_off.wav");
+					toggleButton_2.setText("ON");
+					}
+			}
+		});
 		toggleButton_2.setBounds(12, 73, 67, 57);
 		panel_5.add(toggleButton_2);
 		
-		JPanel panel = new JPanel();
+		
 		panel.setMaximumSize(new Dimension(32700, 32767));
 		panel.setPreferredSize(new Dimension(-300, 10));
 		horizontalBox_1.add(panel);
@@ -351,22 +500,46 @@ public class XMainBoard {
 		
 		JPanel antiTheftInfo = new JPanel();
 		panel.add(antiTheftInfo, "name_343166705630381");
+		antiTheftInfo.setLayout(null);
+		
+		JLabel lblNewLabel_2 = new JLabel("<html>When this feature is turned on, if this car is affected by external forces while the Smart Key is not in a radius of 5 meters, the car will emit alarm sounds</html>");
+		lblNewLabel_2.setFont(new Font("Arial", Font.PLAIN, 18));
+		lblNewLabel_2.setBounds(33, 0, 420, 144);
+		antiTheftInfo.add(lblNewLabel_2);
 		
 		JPanel windsScreenInfo = new JPanel();
 		panel.add(windsScreenInfo, "name_343194074161899");
+		windsScreenInfo.setLayout(null);
+		
+		JLabel lblwhenThisFeature = new JLabel("<html>When this feature is turned on, the wiper will automatically clears the windscreen when the windscreen is dirty or smudged</html>");
+		lblwhenThisFeature.setFont(new Font("Arial", Font.PLAIN, 18));
+		lblwhenThisFeature.setBounds(33, 141, 420, 144);
+		windsScreenInfo.add(lblwhenThisFeature);
 		
 		JPanel adjustLightInfo = new JPanel();
 		panel.add(adjustLightInfo, "name_343209872829260");
+		adjustLightInfo.setLayout(null);
+		
+		JLabel lblwhenThisFeature_1 = new JLabel("<html>When this feature is turned on, the car will automatically adjust the light brightness and gradient so as not to divert people's eyes in the opposite direction</html>");
+		lblwhenThisFeature_1.setFont(new Font("Arial", Font.PLAIN, 18));
+		lblwhenThisFeature_1.setBounds(12, 289, 420, 144);
+		adjustLightInfo.add(lblwhenThisFeature_1);
 		
 		JPanel lockButtonInfo = new JPanel();
 		panel.add(lockButtonInfo, "name_343226222483365");
+		lockButtonInfo.setLayout(null);
+		
+		JLabel lblwhenThisFeature_2 = new JLabel("<html>When this feature is turned on, the physical buttons will be disabled when both of driver's hands is on the steering wheel</html>");
+		lblwhenThisFeature_2.setFont(new Font("Arial", Font.PLAIN, 18));
+		lblwhenThisFeature_2.setBounds(12, 431, 420, 144);
+		lockButtonInfo.add(lblwhenThisFeature_2);
 
 		JPanel panel_Nav_dp = new JPanel();
-		// Browser browser = new Browser();
-		// panel_Nav_dp.setLayout(new BorderLayout(0, 0));
-		// BrowserView view = new BrowserView(browser);
-		// panel_Nav_dp.add(view);
-		// browser.loadURL("http://maps.google.com");
+		 Browser browser = new Browser();
+		 panel_Nav_dp.setLayout(new BorderLayout(0, 0));
+		 BrowserView view = new BrowserView(browser);
+		 panel_Nav_dp.add(view);
+		 browser.loadURL("http://maps.google.com");
 		panel_4.add(panel_Nav_dp, "name_172335601776851");
 	}
 
@@ -391,28 +564,24 @@ public class XMainBoard {
 	{
 		btn.setText(text);
 	}
-
-	public Image toBufferedImage(Mat m) {
-		int type = BufferedImage.TYPE_BYTE_GRAY;
-		if (m.channels() > 1) {
-			type = BufferedImage.TYPE_3BYTE_BGR;
-		}
-		int bufferSize = m.channels() * m.cols() * m.rows();
-		byte[] b = new byte[bufferSize];
-		m.get(0, 0, b); // get all the pixels
-		System.out.println(b.length);
-		// BufferedImage image = new BufferedImage(m.cols(), m.rows(), type);
-		// final byte[] targetPixels = ((DataBufferByte)
-		// image.getRaster().getDataBuffer()).getData();
-		// System.arraycopy(b, 0, targetPixels, 0, b.length);
-		// BufferedImage resizedImage = new BufferedImage(320, 240, type);
-		// Graphics2D g = resizedImage.createGraphics();
-		// g.drawImage(image, 0, 0, 320, 240, null);
-		// g.dispose();
-		// image.
-		// image.copyData(System.arraycopy(b, 0, targetPixels, 0, b.length));
-		// System.out.println(targetPixels.length);
-		return new ImageIcon(b).getImage();
-
+	
+	private void playSound(String filename)
+	{
+		 try {
+	         // Open an audio input stream.           
+	          File soundFile = new File(filename); //you could also get the sound file with an URL
+	          AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);              
+	         // Get a sound clip resource.
+	         Clip clip = AudioSystem.getClip();
+	         // Open audio clip and load samples from the audio input stream.
+	         clip.open(audioIn);
+	         clip.start();
+	      } catch (UnsupportedAudioFileException e) {
+	         e.printStackTrace();
+	      } catch (IOException e) {
+	         e.printStackTrace();
+	      } catch (LineUnavailableException e) {
+	         e.printStackTrace();
+	      }
 	}
 }

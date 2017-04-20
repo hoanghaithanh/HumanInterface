@@ -41,4 +41,6 @@
 <fullyQualifiedTypeName name="java.io.IOException"/>
 <fullyQualifiedTypeName name="javax.sound.sampled.LineUnavailableException"/>
 <fullyQualifiedTypeName name="java.awt.Toolkit"/>
+<fullyQualifiedTypeName name="java.awt.event.ActionListener"/>
+<fullyQualifiedTypeName name="javax.swing.plaf.metal.MetalToggleButtonUI"/>
 </qualifiedTypeNameHistroy>

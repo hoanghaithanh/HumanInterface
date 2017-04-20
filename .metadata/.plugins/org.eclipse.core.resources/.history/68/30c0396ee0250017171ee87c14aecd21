@@ -382,20 +382,19 @@ public class XMainBoard {
 		JToggleButton toggleButton = new JToggleButton("ON");
 		
 		toggleButton.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				if(toggleButton.isSelected()) 
-					{
-					playSound("autoadjustflashlight_on.wav");
-					toggleButton.setText("OFF");
-					}
-				else 
-					{
-					playSound("autoadjustflashlight_off.wav");
-					toggleButton.setText("ON");
-					}
+				{
+				playSound("smartwindscreenwipers_on.wav");
+				toggleButton.setText("OFF");
+				}
+			else 
+			{
+				playSound("smartwindscreenwipers_off.wav");
+				toggleButton.setText("ON");
+			}
 			}
 		});
 		
@@ -424,6 +423,7 @@ public class XMainBoard {
 		panel_3.add(lblAutoAdjustFlashlight);
 		
 		JToggleButton toggleButton_1 = new JToggleButton("ON");
+		toggleButton = new JToggleButton("ON");
 		toggleButton_1.setUI(new MetalToggleButtonUI() {
 		    @Override
 		    protected Color getSelectColor() {
