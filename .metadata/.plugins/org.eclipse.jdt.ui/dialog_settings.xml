@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
-	<item value="C:\Users\hoang\Downloads" key="org.eclipse.jdt.ui.lastextjar"/>
+	<item value="E:\Study\JavaCode\HumanInterface_Prototype\lib\opencv\build\java" key="org.eclipse.jdt.ui.lastextjar"/>
 	<section name="FatJarPackageWizard">
 		<item value="E:\Study\JavaCode" key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION"/>
 		<item value="XMainBoard - HumanInterface_Prototype" key="FatJarPackageWizardPage.LAUNCH_CONFIGURATION_SELECTION_NAME"/>
-		<item value="C:\Users\hoang\OneDrive\Documents\Carsystem\demo.jar" key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION"/>
+		<item value="HumanInterface_Prototype\demo.jar" key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION"/>
 		<item value="false" key="FatJarPackageWizardPage.ANTSCRIPT_SAVE"/>
 		<item value="3" key="FatJarPackageWizardPage.LIBRARY_HANDLING"/>
 		<list key="FatJarPackageWizardPage.DESTINATION_NAMES_ID">
-			<item value="C:\Users\hoang\OneDrive\Documents\Carsystem\demo.jar"/>
+			<item value="HumanInterface_Prototype\demo.jar"/>
 			<item value="HumanInterface_Prototype/demo.jar"/>
+			<item value="C:\Users\hoang\OneDrive\Documents\Carsystem\demo.jar"/>
 		</list>
 		<list key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION_HISTORY">
 			<item value="E:\Study\JavaCode.xml"/>
@@ -25,6 +26,8 @@
 	</section>
 	<section name="ClasspathContainerSelectionPage">
 		<item value="6" key="index"/>
+	</section>
+	<section name="OptionalMessageDialog.hide.">
 	</section>
 	<section name="quick_assist_proposal_size">
 	</section>

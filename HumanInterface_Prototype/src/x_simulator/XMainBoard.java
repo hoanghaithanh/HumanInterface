@@ -61,7 +61,9 @@ public class XMainBoard {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		String opencvpath = System.getProperty("user.dir") + "\\files\\";
+		String libPath = System.getProperty("java.library.path");
+		System.load(opencvpath + Core.NATIVE_LIBRARY_NAME + ".dll");
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
