@@ -10,10 +10,18 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -90,6 +98,7 @@ public class XMainBoard {
 		btnTemp.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Toolkit.getDefaultToolkit().beep();
 				int i = Integer.parseInt(label.getText());
 				if(i<30) i++;
 				label.setText(Integer.toString(i));
@@ -99,6 +108,7 @@ public class XMainBoard {
 		JButton btnTemp_1 = new JButton("Temp -");
 		btnTemp_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				Toolkit.getDefaultToolkit().beep();
 				int i = Integer.parseInt(label.getText());
 				if(i>=17) i--;
 				label.setText(Integer.toString(i));
@@ -195,12 +205,14 @@ public class XMainBoard {
 			public void mouseClicked(MouseEvent e) {
 				if(tglbtnPowerOn.isSelected())
 				{
+					playSound("airconditioner_on.wav");
 					lblStatusvalue.setText("ON");
 					btnTemp.setEnabled(true);
 					btnTemp_1.setEnabled(true);
 				}
 				else 
 				{
+					playSound("airconditioner_off.wav");
 					lblStatusvalue.setText("OFF");
 					btnTemp.setEnabled(false);
 					btnTemp_1.setEnabled(false);
@@ -254,25 +266,33 @@ public class XMainBoard {
 		panel_8.add(panel_12);
 
 		JButton btnStartCamera = new JButton("Start Camera");
+		
 		btnStartCamera.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnStartCamera.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
+				if(btnStartCamera.isEnabled())
+			{
 				if(btnStartCamera.getText().equals("Start Camera"))
-				{
-				panel_12.initCamera();
-				btnStartCamera.setText("Stop Camera");
-				}
-				else
-				{
-					panel_12.stop();
-					btnStartCamera.setText("Start Camera");
+					
+					{
+						btnStartCamera.setText("Stop Camera");
+						btnStartCamera.setEnabled(false);
+						playSound("rearcamera_on.wav");
+						panel_12.initCamera();
+						btnStartCamera.setEnabled(true);
+					}
+					else
+					{
+						panel_12.stop();
+						btnStartCamera.setText("Start Camera");
+						btnStartCamera.setEnabled(false);
+						playSound("rearcamera_off.wav");
+						btnStartCamera.setEnabled(true);
+					}
+				
 				}
 			}
 		});
+
 		
 		btnStartCamera.setBounds(361, 454, 109, 45);
 		panel_8.add(btnStartCamera);
@@ -313,8 +333,16 @@ public class XMainBoard {
 		tglbtnOn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(tglbtnOn.isSelected()) tglbtnOn.setText("OFF");
-				else tglbtnOn.setText("ON");
+				if(tglbtnOn.isSelected())
+				{
+					playSound("smartantitheft_on.wav");
+					tglbtnOn.setText("OFF");
+				}
+				else 
+					{
+					playSound("smartantitheft_off.wav");
+					tglbtnOn.setText("ON");
+					}
 			}
 		});
 		tglbtnOn.setBounds(12, 82, 67, 48);
@@ -339,8 +367,16 @@ public class XMainBoard {
 		toggleButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(toggleButton.isSelected()) toggleButton.setText("OFF");
-				else toggleButton.setText("ON");
+				if(toggleButton.isSelected()) 
+					{
+					playSound("smartwindscreenwipers_on.wav");
+					toggleButton.setText("OFF");
+					}
+				else 
+				{
+					playSound("smartwindscreenwipers_off.wav");
+					toggleButton.setText("ON");
+				}
 			}
 		});
 		toggleButton.setBounds(12, 78, 67, 52);
@@ -365,8 +401,16 @@ public class XMainBoard {
 		toggleButton_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(toggleButton_1.isSelected()) toggleButton_1.setText("OFF");
-				else toggleButton_1.setText("ON");
+				if(toggleButton_1.isSelected()) 
+					{
+					playSound("autoadjustflashlight_on.wav");
+					toggleButton_1.setText("OFF");
+					}
+				else 
+					{
+					playSound("autoadjustflashlight_off.wav");
+					toggleButton_1.setText("ON");
+					}
 			}
 		});
 		toggleButton_1.setBounds(12, 74, 67, 56);
@@ -382,7 +426,7 @@ public class XMainBoard {
 		verticalBox_1.add(panel_5);
 		panel_5.setLayout(null);
 		
-		JLabel lblLockButtonsWhen = new JLabel("Lock buttons when hands on wheel");
+		JLabel lblLockButtonsWhen = new JLabel("Smart physical buttons control");
 		lblLockButtonsWhen.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblLockButtonsWhen.setBounds(12, 27, 325, 49);
 		panel_5.add(lblLockButtonsWhen);
@@ -391,8 +435,16 @@ public class XMainBoard {
 		toggleButton_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(toggleButton_2.isSelected()) toggleButton_2.setText("OFF");
-				else toggleButton_2.setText("ON");
+				if(toggleButton_2.isSelected()) 
+				{
+					playSound("smartphysicalbuttonscontrol_on.wav");
+					toggleButton_2.setText("OFF");
+				}
+				else 
+					{
+					playSound("smartphysicalbuttonscontrol_off.wav");
+					toggleButton_2.setText("ON");
+					}
 			}
 		});
 		toggleButton_2.setBounds(12, 73, 67, 57);
@@ -471,28 +523,24 @@ public class XMainBoard {
 	{
 		btn.setText(text);
 	}
-
-	public Image toBufferedImage(Mat m) {
-		int type = BufferedImage.TYPE_BYTE_GRAY;
-		if (m.channels() > 1) {
-			type = BufferedImage.TYPE_3BYTE_BGR;
-		}
-		int bufferSize = m.channels() * m.cols() * m.rows();
-		byte[] b = new byte[bufferSize];
-		m.get(0, 0, b); // get all the pixels
-		System.out.println(b.length);
-		// BufferedImage image = new BufferedImage(m.cols(), m.rows(), type);
-		// final byte[] targetPixels = ((DataBufferByte)
-		// image.getRaster().getDataBuffer()).getData();
-		// System.arraycopy(b, 0, targetPixels, 0, b.length);
-		// BufferedImage resizedImage = new BufferedImage(320, 240, type);
-		// Graphics2D g = resizedImage.createGraphics();
-		// g.drawImage(image, 0, 0, 320, 240, null);
-		// g.dispose();
-		// image.
-		// image.copyData(System.arraycopy(b, 0, targetPixels, 0, b.length));
-		// System.out.println(targetPixels.length);
-		return new ImageIcon(b).getImage();
-
+	
+	private void playSound(String filename)
+	{
+		 try {
+	         // Open an audio input stream.           
+	          File soundFile = new File(filename); //you could also get the sound file with an URL
+	          AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);              
+	         // Get a sound clip resource.
+	         Clip clip = AudioSystem.getClip();
+	         // Open audio clip and load samples from the audio input stream.
+	         clip.open(audioIn);
+	         clip.start();
+	      } catch (UnsupportedAudioFileException e) {
+	         e.printStackTrace();
+	      } catch (IOException e) {
+	         e.printStackTrace();
+	      } catch (LineUnavailableException e) {
+	         e.printStackTrace();
+	      }
 	}
 }
